@@ -17,6 +17,7 @@
             background-size: cover;
             background-position: center;
         }
+        /* Pulse animation for the music button when playing */
         .is-playing {
             animation: pulse 2s infinite;
         }
@@ -36,7 +37,7 @@
             <p class="text-base md:text-lg italic serif">October 24th, 2026</p>
         </div>
         <div class="absolute bottom-10 animate-bounce">
-            <span class="text-[10px] md:text-sm uppercase tracking-widest opacity-80">Scroll to Explore</span>
+            <span class="text-[10px] md:text-sm uppercase tracking-widest opacity-80">Scroll</span>
         </div>
     </section>
 
@@ -50,13 +51,13 @@
 
     <section class="py-12 md:py-16 bg-white shadow-inner">
         <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
-            <div class="text-center p-6 md:p-8 border border-stone-100 rounded-lg bg-stone-50/30" data-aos="fade-up">
+            <div class="text-center p-6 md:p-8 border border-stone-100 rounded-lg bg-stone-50/30" data-aos="fade-up" data-aos-delay="100">
                 <h4 class="serif text-xl md:text-2xl mb-3 md:mb-4 text-stone-600">The Ceremony</h4>
                 <p class="font-bold text-lg">2:00 PM</p>
                 <p class="text-stone-800">St. Nicholas Cathedral</p>
                 <p class="text-stone-500 italic text-sm md:text-base">123 Wedding Lane, Cityville</p>
             </div>
-            <div class="text-center p-6 md:p-8 border border-stone-100 rounded-lg bg-stone-50/30" data-aos="fade-up">
+            <div class="text-center p-6 md:p-8 border border-stone-100 rounded-lg bg-stone-50/30" data-aos="fade-up" data-aos-delay="200">
                 <h4 class="serif text-xl md:text-2xl mb-3 md:mb-4 text-stone-600">The Reception</h4>
                 <p class="font-bold text-lg">6:00 PM</p>
                 <p class="text-stone-800">Grand Heritage Ballroom</p>
@@ -86,7 +87,7 @@
         </button>
     </div>
 
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop>
         <source src="the_mountain-love-163870.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
@@ -100,34 +101,9 @@
         const playIcon = document.getElementById('playIcon');
         const pauseIcon = document.getElementById('pauseIcon');
 
-        audio.volume = 0.4;
-
-        function playAudio() {
-            audio.play().then(() => {
-                // Once playing, update the UI
-                playIcon.classList.add('hidden');
-                pauseIcon.classList.remove('hidden');
-                musicBtn.classList.add('is-playing');
-                // Remove the "click-to-play" listener once it's started
-                document.removeEventListener('click', playAudio);
-                document.removeEventListener('touchstart', playAudio);
-            }).catch(error => {
-                console.log("Autoplay was prevented. Waiting for interaction.");
-            });
-        }
-
-        // 1. Try to play immediately (works in some browsers/settings)
-        window.addEventListener('load', playAudio);
-
-        // 2. Play on first user interaction (reliable fix for Chrome/Safari)
-        document.addEventListener('click', playAudio);
-        document.addEventListener('touchstart', playAudio);
-
-        // Manual Toggle Logic
-        musicBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevents the document click listener from firing
+        musicBtn.addEventListener('click', () => {
             if (audio.paused) {
-                audio.play();
+                audio.play().catch(e => console.log("Autoplay blocked"));
                 playIcon.classList.add('hidden');
                 pauseIcon.classList.remove('hidden');
                 musicBtn.classList.add('is-playing');
@@ -138,6 +114,7 @@
                 musicBtn.classList.remove('is-playing');
             }
         });
+        audio.volume = 0.4;
     </script>
 </body>
 </html>
