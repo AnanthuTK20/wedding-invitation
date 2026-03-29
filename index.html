@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding of Alex & Sam</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+        .serif { font-family: 'Playfair Display', serif; }
+        .hero-bg {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+        }
+        /* Pulse animation for the music button when playing */
+        .is-playing {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(168, 162, 158, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(168, 162, 158, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(168, 162, 158, 0); }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <section class="h-screen flex items-center justify-center text-center hero-bg text-white relative">
+        <div data-aos="fade-up" data-aos-duration="2000">
+            <h2 class="text-xl uppercase tracking-[0.3em] mb-4">We are getting married</h2>
+            <h1 class="serif text-6xl md:text-8xl mb-6">Alex & Sam</h1>
+            <p class="text-lg italic serif">October 24th, 2026</p>
+        </div>
+        <div class="absolute bottom-10 animate-bounce">
+            <span class="text-sm uppercase tracking-widest">Scroll</span>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 text-center max-w-3xl mx-auto" data-aos="fade-up">
+        <h3 class="serif text-3xl mb-8 text-yellow-700">Save the Date</h3>
+        <p class="text-lg leading-relaxed mb-6">
+            Because you have shared in our lives by your friendship and love, we invite you to join us as we exchange marriage vows and begin our new life together.
+        </p>
+        <div class="h-px w-24 bg-yellow-700 mx-auto mt-8"></div>
+    </section>
+
+    <section class="py-16 bg-white shadow-inner">
+        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+            <div class="text-center p-8 border border-stone-100 rounded-lg" data-aos="fade-right">
+                <h4 class="serif text-2xl mb-4 text-stone-600">The Ceremony</h4>
+                <p class="font-bold">2:00 PM</p>
+                <p>St. Nicholas Cathedral</p>
+                <p class="text-stone-500 italic">123 Wedding Lane, Cityville</p>
+            </div>
+            <div class="text-center p-8 border border-stone-100 rounded-lg" data-aos="fade-left">
+                <h4 class="serif text-2xl mb-4 text-stone-600">The Reception</h4>
+                <p class="font-bold">6:00 PM</p>
+                <p>Grand Heritage Ballroom</p>
+                <p class="text-stone-500 italic">456 Celebration Way, Cityville</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 text-center bg-stone-900 text-white">
+        <div data-aos="zoom-in">
+            <h2 class="serif text-4xl mb-8">Will You Attend?</h2>
+            <p class="mb-10 text-stone-400">Please let us know by September 1st</p>
+            <a href="https://forms.google.com" target="_blank" class="px-10 py-4 border border-white hover:bg-white hover:text-black transition duration-300 uppercase tracking-widest text-sm inline-block">
+                RSVP Now
+            </a>
+        </div>
+    </section>
+
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="musicToggle" class="bg-white/90 backdrop-blur-md p-4 rounded-full shadow-lg border border-stone-200 flex items-center justify-center transition hover:scale-110 active:scale-95">
+            <span id="playIcon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-stone-700"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </span>
+            <span id="pauseIcon" class="hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-stone-700"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+            </span>
+        </button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="the_mountain-love-163870.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Initialize Scroll Animations
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Audio Logic
+        const musicBtn = document.getElementById('musicToggle');
+        const audio = document.getElementById('bgMusic');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+
+        musicBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                // Play Audio
+                audio.play().catch(error => {
+                    console.log("Browser blocked autoplay. User must interact first.");
+                });
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+                musicBtn.classList.add('is-playing');
+            } else {
+                // Pause Audio
+                audio.pause();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+                musicBtn.classList.remove('is-playing');
+            }
+        });
+
+        // Set initial volume
+        audio.volume = 0.4;
+    </script>
+</body>
+</html>
